@@ -5,7 +5,8 @@ submitted by team `Bertha von Suttner`:
 * Ye Jiang
 * [Johann Petrak](http://johann-petrak.github.io) 
 * Xingyi Song
-all members of the [GATE](https://gate.ac.uk) team of the [University of Sheffield Natural Language Processing group](https://www.sheffield.ac.uk/dcs/research/groups/nlp)
+
+All are members of the [GATE](https://gate.ac.uk) team of the [University of Sheffield Natural Language Processing group](https://www.sheffield.ac.uk/dcs/research/groups/nlp)
 
 ## Preparation / Requirements
 
