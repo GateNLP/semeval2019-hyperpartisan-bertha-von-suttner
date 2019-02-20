@@ -4,3 +4,4 @@ __pycache__
 /saved_models/*.hdf5
 /elmo
 /data
+*~
