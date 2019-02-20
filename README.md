@@ -19,7 +19,7 @@ Preparation steps:
 * create a directory `elmo` and store the ELMo model files in that directory:
   * https://s3-us-west-2.amazonaws.com/allennlp/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_weights.hdf5
   * https://s3-us-west-2.amazonaws.com/allennlp/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_options.json
-* create a directory `data` and save the by-article training files:
+* create a directory `data` and save the by-article training files into it:
   * articles-training-byarticle-20181122.xml
   * ground-truth-training-byarticle-20181122.xml 
 
