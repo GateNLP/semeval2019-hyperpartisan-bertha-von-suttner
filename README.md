@@ -8,6 +8,9 @@ submitted by team `Bertha von Suttner`:
 
 All are members of the [GATE](https://gate.ac.uk) team of the [University of Sheffield Natural Language Processing group](https://www.sheffield.ac.uk/dcs/research/groups/nlp)
 
+The model created with this was the winning entry, see the public leaderboard (sort by accuracy column, descending):
+https://www.tira.io/task/hyperpartisan-news-detection/dataset/pan19-hyperpartisan-news-detection-by-article-test-dataset-2018-12-07/
+
 ## Preparation / Requirements
 
 * Python 3.6 (Anaconda will work best)
