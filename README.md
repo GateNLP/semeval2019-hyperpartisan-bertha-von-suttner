@@ -1,6 +1,6 @@
 # SemEval2019/Task4 Team Bertha-von-Suttner submission
 
-This is the code for the SemEval 2019 Task 4, Hyperpartisan News Detection 
+This is the code for the [SemEval 2019 Task 4, Hyperpartisan News Detection](https://pan.webis.de/semeval19/semeval19-web/)
 submitted by team `Bertha von Suttner`:
 * Ye Jiang
 * [Johann Petrak](http://johann-petrak.github.io) 
