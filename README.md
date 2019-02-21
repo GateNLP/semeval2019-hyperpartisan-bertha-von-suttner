@@ -18,6 +18,7 @@ https://www.tira.io/task/hyperpartisan-news-detection/dataset/pan19-hyperpartisa
 * Keras version 2.2.4
 * PyTorch version 0.4.1
 * Spacy version 2.0.16
+* Sklearn version 0.20.0
 
 Preparation steps:
 * create a directory `elmo` and store the ELMo model files in that directory:
