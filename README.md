@@ -4,7 +4,7 @@ This is the code for the [SemEval 2019 Task 4, Hyperpartisan News Detection](htt
 submitted by team `Bertha von Suttner`:
 * Ye Jiang
 * [Johann Petrak](http://johann-petrak.github.io) 
-* Xingyi Song
+* [Xingyi Song](http://staffwww.dcs.shef.ac.uk/people/X.Song/)
 
 All are members of the [GATE](https://gate.ac.uk) team of the [University of Sheffield Natural Language Processing group](https://www.sheffield.ac.uk/dcs/research/groups/nlp)
 
