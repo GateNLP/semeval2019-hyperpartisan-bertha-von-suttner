@@ -2,7 +2,7 @@
 
 This is the code for the [SemEval 2019 Task 4, Hyperpartisan News Detection](https://pan.webis.de/semeval19/semeval19-web/)
 submitted by team `Bertha von Suttner`:
-* Ye Jiang
+* [Ye Jiang](https://ye-jiang.github.io/)
 * [Johann Petrak](http://johann-petrak.github.io) 
 * [Xingyi Song](http://staffwww.dcs.shef.ac.uk/people/X.Song/)
 
