@@ -16,6 +16,7 @@ https://www.tira.io/task/hyperpartisan-news-detection/dataset/pan19-hyperpartisa
 * Python 3.6 (Anaconda will work best)
 * Tensorflow version 1.12.0
 * Keras version 2.2.4
+* NLTK version 3.4.1
 * PyTorch version 0.4.1
 * Spacy version 2.0.16
 * Sklearn version 0.20.0
@@ -26,6 +27,13 @@ Like this:
 
 ```
 python -m spacy download en_core_web_sm
+```
+
+Once NLTK is installed, you also need to install its
+`stopwords` data:
+
+```
+python -m nltk.downloader stopwords
 ```
 
 Preparation steps:
