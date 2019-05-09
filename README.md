@@ -14,6 +14,7 @@ https://www.tira.io/task/hyperpartisan-news-detection/dataset/pan19-hyperpartisa
 ## Preparation / Requirements
 
 * Python 3.6 (Anaconda will work best)
+* Gensim version 3.4.0
 * Tensorflow version 1.12.0
 * Keras version 2.2.4
 * NLTK version 3.4.1
