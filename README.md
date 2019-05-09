@@ -20,6 +20,14 @@ https://www.tira.io/task/hyperpartisan-news-detection/dataset/pan19-hyperpartisa
 * Spacy version 2.0.16
 * Sklearn version 0.20.0
 
+Once spaCy is installed, you also need to install its
+[`en_core_web_sm`](https://spacy.io/usage/models) model.
+Like this:
+
+```
+python -m spacy download en_core_web_sm
+```
+
 Preparation steps:
 * create a directory `elmo` and store the ELMo model files in that directory:
   * https://s3-us-west-2.amazonaws.com/allennlp/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_weights.hdf5
