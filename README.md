@@ -59,7 +59,7 @@ Run the following steps
 * Make sure the directory `saved_models` does not contain any model files from previous runs:
   * `rm saved_models/*.hdf5`
 * Train the actual model: 
-  `python CNN_elmo.py work/train.elmo.tsv`
+  `KERAS_BACKEND=tensorflow python CNN_elmo.py work/train.elmo.tsv`
   This will create a number of model files in the `saved_models` directory. The file names contain the validation accuracy.
 
 
