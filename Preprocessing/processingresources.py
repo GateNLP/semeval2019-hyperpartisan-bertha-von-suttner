@@ -4,7 +4,7 @@ Classes representing "processing resources"
 
 import preprocessing
 import xml.etree.ElementTree
-import tldextract
+
 from collections import Counter
 import features
 import json

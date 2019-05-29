@@ -16,5 +16,5 @@ m2=${amodels[1]}
 m3=${amodels[2]}
 
 echo 'Running: ' python ensemble_pred.py --saved_model1 $m1 --saved_model2 $m2 --saved_model3 $m3 --inputTSV $inelmo --output $outpreds
-python ensemble_pred.py --saved_model1 $m1 --saved_model2 $m2 --saved_model3 $m3 --inputTSV $inelmo --output $outpreds
+KERAS_BACKEND=tensorflow python ensemble_pred.py --saved_model1 $m1 --saved_model2 $m2 --saved_model3 $m3 --inputTSV $inelmo --output $outpreds
 

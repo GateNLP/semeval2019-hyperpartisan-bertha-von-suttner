@@ -14,11 +14,28 @@ https://www.tira.io/task/hyperpartisan-news-detection/dataset/pan19-hyperpartisa
 ## Preparation / Requirements
 
 * Python 3.6 (Anaconda will work best)
+* Gensim version 3.4.0
 * Tensorflow version 1.12.0
 * Keras version 2.2.4
+* NLTK version 3.4.1
 * PyTorch version 0.4.1
 * Spacy version 2.0.16
 * Sklearn version 0.20.0
+
+Once spaCy is installed, you also need to install its
+[`en_core_web_sm`](https://spacy.io/usage/models) model.
+Like this:
+
+```
+python -m spacy download en_core_web_sm
+```
+
+Once NLTK is installed, you also need to install its
+`stopwords` data:
+
+```
+python -m nltk.downloader stopwords
+```
 
 Preparation steps:
 * create a directory `elmo` and store the ELMo model files in that directory:
@@ -42,7 +59,7 @@ Run the following steps
 * Make sure the directory `saved_models` does not contain any model files from previous runs:
   * `rm saved_models/*.hdf5`
 * Train the actual model: 
-  `python CNN_elmo.py work/train.elmo.tsv`
+  `KERAS_BACKEND=tensorflow python CNN_elmo.py work/train.elmo.tsv`
   This will create a number of model files in the `saved_models` directory. The file names contain the validation accuracy.
 
 
