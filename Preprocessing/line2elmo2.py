@@ -7,10 +7,11 @@ title as the first sentence, then splits the article sentences. The domains are 
 '''
 
 import argparse
-from allennlp.commands.elmo import ElmoEmbedder
 import os
 import json
 import math
+
+from allennlp.commands.elmo import ElmoEmbedder
 import numpy as np
 
 configs = {
@@ -28,8 +29,7 @@ models = {
 
 }
 
-if __name__ == '__main__':
-
+def main():
     default_m = "original"
     parser = argparse.ArgumentParser()
     parser.add_argument("infile", type=str, help="Input file, should be in sent1 format")
@@ -65,44 +65,75 @@ if __name__ == '__main__':
 
     print("Processing lines...")
     with open(infile, "rt", encoding="utf8") as inp:
-        nlines = 0
         with open(outfile, "wt", encoding="utf8") as outp:
-            for line in inp:
+            nlines = 0
+            for nlines, line in enumerate(inp):
                 fields = line.split("\t")
                 title = fields[5]
                 tmp = fields[4]
-                tmp = tmp.split(" <splt> ")[:maxsents]
+                tmp = tmp.split(" <splt> ")
                 sents = [title]
                 sents.extend(tmp)
-                # now processes the sents in batches
-                outs = []
-                # unlike the tensorflow version we can have dynamic batch sizes here!
-                for batchnr in range(math.ceil(len(sents)/batchsize)):
-                    fromidx = batchnr * batchsize
-                    toidx = (batchnr+1) * batchsize
-                    actualtoidx = min(len(sents), toidx)
-                    # print("Batch: from=",fromidx,"toidx=",toidx,"actualtoidx=",actualtoidx)
-                    sentsbatch = sents[fromidx:actualtoidx]
-                    sentsbatch = [s.split()[:maxtoks] for s in sentsbatch]
-                    for s in sentsbatch:
-                        if len(s) == 0:
-                            s.append("")  # otherwise we get a shape (3,0,dims) result
-                    ret = list(elmo.embed_sentences(sentsbatch))
-                    # the ret is the original representation of three vectors per word
-                    # We first combine per word through concatenation or average, then average
-                    if concat:
-                        ret = [np.concatenate(x, axis=1) for x in ret]
-                    else:
-                        ret = [np.average(x, axis=1) for x in ret]
-                    # print("DEBUG tmpembs=", [l.shape for l in tmpembs])
-                    ret = [np.average(x, axis=0) for x in ret]
-                    # print("DEBUG finalreps=", [l.shape for l in finalreps])
-                    outs.extend(ret)
+
+                outs = elmo_one_article(
+                    elmo, sents, maxsents,
+                    maxtoks, batchsize, concat=concat)
 
                 # print("Result lines:", len(outs))
                 outs = [a.tolist() for a in outs]
                 print(fields[0], fields[1], fields[2], fields[3], json.dumps(outs), sep="\t", file=outp)
-                nlines += 1
-                if nlines % every == 0:
+                if (1+nlines) % every == 0:
                     print("Processed lines:", nlines)
         print("Total processed lines:", nlines)
+
+
+def elmo_one_article(elmo, sents, maxsents, maxtoks, batchsize, concat=False):
+    """
+    Convert a single article into ELMo embeddings
+    (using the embedder `elmo`).
+
+    `sents` is the article is modelled as a sequence (list) of sentences;
+    each sentence being a single string that
+    has already been tokenised with tokens separated by spaces.
+
+    The first sentence is assumed to be a title;
+    subsequent to that, only `maxsents` sentences are considered.
+    Within each sentence, only maxtoks tokens are considered.
+
+    The result is one vector per sentence;
+    having combined the vectors for a word by
+    either concatenation (if concat is True) or averaging (the default),
+    then averaging each word vector in a sentence.
+    """
+
+    sents = sents[:1+maxsents]
+
+    # processes the sents in batches
+    outs = []
+    # unlike the tensorflow version we can have dynamic batch sizes here!
+    for batchnr in range(math.ceil(len(sents)/batchsize)):
+        fromidx = batchnr * batchsize
+        toidx = (batchnr+1) * batchsize
+        actualtoidx = min(len(sents), toidx)
+        # print("Batch: from=",fromidx,"toidx=",toidx,"actualtoidx=",actualtoidx)
+        sentsbatch = sents[fromidx:actualtoidx]
+        sentsbatch = [s.split()[:maxtoks] for s in sentsbatch]
+        for s in sentsbatch:
+            if len(s) == 0:
+                s.append("")  # otherwise we get a shape (3,0,dims) result
+        ret = list(elmo.embed_sentences(sentsbatch))
+        # the ret is the original representation of three vectors per word
+        # We first combine per word through concatenation or average, then average
+        if concat:
+            ret = [np.concatenate(x, axis=1) for x in ret]
+        else:
+            ret = [np.average(x, axis=1) for x in ret]
+        # print("DEBUG tmpembs=", [l.shape for l in tmpembs])
+        ret = [np.average(x, axis=0) for x in ret]
+        # print("DEBUG finalreps=", [l.shape for l in finalreps])
+        outs.extend(ret)
+    return outs
+
+
+if __name__ == '__main__':
+    main()
