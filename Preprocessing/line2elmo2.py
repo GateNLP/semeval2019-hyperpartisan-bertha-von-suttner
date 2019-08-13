@@ -10,6 +10,8 @@ import argparse
 import os
 import json
 import math
+# https://docs.python.org/3.5/library/pathlib.html
+import pathlib
 
 from allennlp.commands.elmo import ElmoEmbedder
 import numpy as np
@@ -21,7 +23,7 @@ configs = {
   "original": "elmo_2x4096_512_2048cnn_2xhighway_options.json"
 }
 
-models = {
+weights = {
   "small": "elmo_2x1024_128_2048cnn_1xhighway_weights.hdf5",
   "medium": "elmo_2x2048_256_2048cnn_1xhighway_weights.hdf5",
   "original5b": "elmo_2x4096_512_2048cnn_2xhighway_5.5B_weights.hdf5",
@@ -48,25 +50,16 @@ def main():
     infile = args.infile
     batchsize = args.b
     every = args.l
-    use_gpu = args.g
-    model = os.path.join("elmo", models[args.m])
-    config = os.path.join("elmo", configs[args.m])
     concat = args.concat
     maxtoks = args.maxtoks
     maxsents = args.maxsents
 
     print("Loading model {}...".format(args.m))
-    if use_gpu:
-        device = 0
-    else:
-        device = -1
-    elmo = ElmoEmbedder(options_file=config, weight_file=model, cuda_device=device)
-
+    elmo = create_elmo(args.m, args.g)
 
     print("Processing lines...")
     with open(infile, "rt", encoding="utf8") as inp:
         with open(outfile, "wt", encoding="utf8") as outp:
-            nlines = 0
             for nlines, line in enumerate(inp):
                 fields = line.split("\t")
                 title = fields[5]
@@ -84,7 +77,30 @@ def main():
                 print(fields[0], fields[1], fields[2], fields[3], json.dumps(outs), sep="\t", file=outp)
                 if (1+nlines) % every == 0:
                     print("Processed lines:", nlines)
-        print("Total processed lines:", nlines)
+        print("Total processed lines:", nlines+1)
+
+
+def create_elmo(model, gpu):
+    """
+    Create an ELMo embedder.
+    `model` is a string specifying the model
+    (it's an index into the configs and weights dicts in this module);
+    `gpu` is True if CUDA device 0 should be used.
+    """
+
+    if gpu:
+        device = 0
+    else:
+        device = -1
+
+    elmo_path = pathlib.Path("elmo")
+    config_path = elmo_path / configs[model]
+    weight_path = elmo_path / weights[model]
+    elmo = ElmoEmbedder(
+      options_file=str(config_path),
+      weight_file=str(weight_path),
+      cuda_device=device)
+    return elmo
 
 
 def elmo_one_article(elmo, sents, maxsents, maxtoks, batchsize, concat=False):

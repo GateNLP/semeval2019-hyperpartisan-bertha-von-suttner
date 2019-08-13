@@ -14,8 +14,9 @@ import sys
 # https://docs.python.org/3.5/library/xml.etree.elementtree.html
 import xml.etree.ElementTree
 
-from Preprocessing import xml2line
 from Preprocessing import utils
+from Preprocessing import xml2line
+from Preprocessing import line2elmo2
 
 
 def hyperpartisan(text):
@@ -32,7 +33,14 @@ def hyperpartisan(text):
 
     del article["et"]
 
-    return article
+    json.dump(article, sys.stdout, indent=2)
+
+    sents = article["article_sent"].split(" <splt> ")
+
+    elmo = line2elmo2.create_elmo("original", False)
+    vectors = line2elmo2.elmo_one_article(elmo, sents, 200, 200, batchsize=50,)
+    json.dump([v.tolist() for v in vectors], sys.stdout,
+    indent=2)
 
 
 def main(argv=None):
@@ -43,7 +51,6 @@ def main(argv=None):
 
     text = " ".join(arg)
     result = hyperpartisan(text)
-    json.dump(result, sys.stdout, indent=2)
 
 
 if __name__ == "__main__":
