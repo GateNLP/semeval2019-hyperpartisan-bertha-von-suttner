@@ -2,15 +2,16 @@
 Classes representing "processing resources"
 """
 
-import preprocessing
 import xml.etree.ElementTree
 
-from collections import Counter
-import features
 import json
 from numbers import Number
-import htmlparser
 import sys
+
+from . import features
+from . import htmlparser
+from . import nlp
+from . import preprocessing
 
 
 class PrArticle2Line:
@@ -119,7 +120,6 @@ class PrFilteredText:
         self.need_et = False
 
     def __call__(self, article, **kwargs):
-        import nlp
         text_tokens = article['text_tokens']
         title_tokens = article['title_tokens']
         tokens = nlp.filter_tokens([t[0] for t in title_tokens])

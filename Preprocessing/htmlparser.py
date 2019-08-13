@@ -4,7 +4,8 @@ a bit of additional data for this.
 """
 
 from html.parser import HTMLParser
-import preprocessing
+
+from . import preprocessing
 
 class MyHTMLParser(HTMLParser):
 

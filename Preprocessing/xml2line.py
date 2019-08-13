@@ -5,7 +5,10 @@ the features to one line per document in an output tsv file.
 '''
 
 import argparse
-import utils, processingresources, features
+
+from . import utils
+from . import processingresources
+from . import features
 
 
 def create_pipeline():
