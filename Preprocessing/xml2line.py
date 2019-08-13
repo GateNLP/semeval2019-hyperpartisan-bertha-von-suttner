@@ -7,8 +7,24 @@ the features to one line per document in an output tsv file.
 import argparse
 import utils, processingresources, features
 
-if __name__ == "__main__":
 
+def create_pipeline():
+    """
+    Create a fresh pipeline (a list of functions) that
+    does the usual XML processing.
+    """
+
+    return [
+        processingresources.PrAddTitle(),
+        processingresources.PrAddText(),
+        processingresources.PrNlpSpacy01(),
+        processingresources.PrFilteredText(),
+        processingresources.PrSeqSentences(),
+        processingresources.PrRemovePars(),
+    ]
+
+
+def main():
     default_F = "FEATURES_TOKENS_ORIG"
 
     parser = argparse.ArgumentParser()
@@ -28,20 +44,15 @@ if __name__ == "__main__":
 
     if args.T is None:
         a2target, a2bias, a2url = (None, None, None)
-        pipeline = []
+        prefix_pipeline = []
     else:
         print("Loading targets")
         a2target, a2bias, a2url = utils.load_targets_file(args.T, cache=None)
-        pipeline = [processingresources.PrAddTarget(a2target, a2bias, a2url)]
+        prefix_pipeline = [processingresources.PrAddTarget(a2target, a2bias, a2url)]
 
-    pipeline.extend([
-        processingresources.PrAddTitle(),
-        processingresources.PrAddText(),
-        processingresources.PrNlpSpacy01(),
-        processingresources.PrFilteredText(),
-        processingresources.PrSeqSentences(),
-        processingresources.PrRemovePars(),
-    ])
+
+    pipeline = create_pipeline()
+    pipeline = prefix_pipeline + pipeline
 
     with open(args.outfile, "wt", encoding="utf8") as outstream:
         pipeline.append(processingresources.PrArticle2Line(outstream, features, addtargets=True))
@@ -51,3 +62,6 @@ if __name__ == "__main__":
         ntotal, nerror = utils.process_articles_xml(args.A, pipeline)
         print("Total processed articles:", ntotal)
         print("Errors (could be >1 per article):", nerror)
+
+if __name__ == "__main__":
+    main()
