@@ -48,7 +48,7 @@ def run_pipeline(functionlist, article, **kwargs):
     :param functionlist:
     :param article:
     :param kwargs:
-    :return:
+    :return: nerror
     """
     nerror = 0
     if kwargs.get("debug"):
@@ -58,8 +58,6 @@ def run_pipeline(functionlist, article, **kwargs):
         if ret:
             nerror += 1
     return nerror
-
-
 
 
 def process_articles_xml(articlesfile, functionlist, maxn=None, **kwargs):
