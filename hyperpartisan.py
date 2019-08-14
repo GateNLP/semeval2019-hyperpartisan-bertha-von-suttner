@@ -22,7 +22,12 @@ import xml.etree.ElementTree
 import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
 
-import keras.preprocessing
+# Avoid "Using TensorFlow backend" stderr stutter.
+# Thanks, random GitHub person: https://github.com/keras-team/keras/issues/1406#issuecomment-466135951
+import contextlib
+with contextlib.redirect_stderr(open(os.devnull, "w")):
+    import keras.preprocessing
+
 import numpy
 import sklearn.preprocessing
 
