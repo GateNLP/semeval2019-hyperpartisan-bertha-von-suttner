@@ -55,6 +55,21 @@ def ensemble(models,model_input):
 
     return model
 
+def load_models(*paths):
+    """
+    Load keras models from the paths, returning a list of
+    models.
+    """
+
+    models = []
+
+    for i, path in enumerate(paths, start=1):
+        model = load_model(path)
+        model.name = "model{}".format(i)
+        models.append(model)
+
+    return models
+
 
 def main():
     parser = OptionParser()
@@ -72,14 +87,9 @@ def main():
 
     x_data, y_data, doc_id = load_data(options.inputTSV,max_len=max_len)
 
-    model1 = load_model(options.saved_model1)
-    model1.name = 'model1'
-    model2 = load_model(options.saved_model2)
-    model2.name = 'model2'
-    model3 = load_model(options.saved_model3)
-    model3.name = 'model3'
-
-    models = [model1, model2, model3]
+    models = load_models(options.saved_model1,
+        options.saved_model2,
+        options.saved_model3)
 
     print(models[0].input_shape[1:])
     model_input = Input(shape=models[0].input_shape[1:], dtype='float32')
