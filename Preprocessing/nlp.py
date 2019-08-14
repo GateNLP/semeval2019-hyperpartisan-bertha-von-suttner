@@ -10,7 +10,6 @@ stopwords = None
 
 
 def init_stopwords():
-    print("Loading stopwords...", file=sys.stderr)
     from nltk.corpus import stopwords as NLTK_STOPWORDS
     from gensim.parsing.preprocessing import STOPWORDS as GENSIM_STOPWORDS
     global stopwords
@@ -21,7 +20,6 @@ def init_stopwords():
     stopwordlist = list(stopwords)
     for s in stopwordlist:
         stopwords.add(s.capitalize())
-    print("Stopwords loaded", file=sys.stderr)
 
 
 re_num_simple = re.compile('^-?[0-9.,]+([eE^][0-9]+)?(th)?$')
