@@ -5,6 +5,8 @@
 import os
 import sys
 
+import hyperpartisan
+
 noisy = False
 if os.environ.get("USER") == "ac1xdrj":
     noisy = True
@@ -27,9 +29,10 @@ print("Python version", sys.version, file=sys.stderr, flush=True)
 
 @executable
 def hyper(document, outputAS):
+    score = hyperpartisan.hyperpartisan(document.text)
     document.annotationSets[outputAS].add(
         0, len(document.text), "hyperpartisan",
-        dict(confidence=0.91, hyperpartisan_label="maybe")
+        dict(hyperpartisan_probability=score)
     )
 
 
