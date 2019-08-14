@@ -70,7 +70,7 @@ Run the following steps
 ## Application
 
 * Convert the XML to tsv:
-  `python Preprocessing/xml2line.py -A $TESTXMLFILE -F article_sent,title_sent work/test.text.tsv`
+  `python -m Preprocessing.xml2line -A $TESTXMLFILE -F article_sent,title_sent work/test.text.tsv`
 * Convert the text to elmo embeddings:
   * If you have a GPU: `python Preprocessing/line2elmo2.py -g -l 100  work/test.text.tsv work/test.elmo.tsv`
   * Otherwise: `python Preprocessing/line2elmo2.py -l 100 work/test.text.tsv work/test.elmo.tsv`
