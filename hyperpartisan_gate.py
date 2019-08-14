@@ -9,12 +9,12 @@ from gate import executable
 
 import hyperpartisan
 
+
 @executable
 def hyper(document, outputAS):
     score = hyperpartisan.hyperpartisan(document.text)
     document.annotationSets[outputAS].add(
-        0, len(document.text), "hyperpartisan",
-        dict(hyperpartisan_probability=score)
+        0, len(document.text), "hyperpartisan", dict(hyperpartisan_probability=score)
     )
 
 
