@@ -9,22 +9,26 @@ of a news document.
 """
 
 
-
 # https://docs.python.org/3.5/library/glob.html
 import glob
+
 # https://docs.python.org/3.5/library/json.html
 import json
+
 # https://docs.python.org/3.5/library/sys.html
 import sys
+
 # https://docs.python.org/3.5/library/xml.etree.elementtree.html
 import xml.etree.ElementTree
 
 import os
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 
 # Avoid "Using TensorFlow backend" stderr stutter.
 # Thanks, random GitHub person: https://github.com/keras-team/keras/issues/1406#issuecomment-466135951
 import contextlib
+
 with contextlib.redirect_stderr(open(os.devnull, "w")):
     import keras.preprocessing
 
@@ -45,10 +49,7 @@ def hyperpartisan(text):
     As estimated by the models in the directory "prediction_models".
     """
 
-    article = {
-        "id": "command line text",
-        "xml": text,
-    }
+    article = {"id": "command line text", "xml": text}
 
     add_article_sent(article)
 
@@ -68,7 +69,8 @@ def add_article_sent(article):
     """
 
     article["et"] = xml.etree.ElementTree.fromstring(
-            '<article title="command line text" />')
+        '<article title="command line text" />'
+    )
 
     pipeline = xml2line.create_pipeline()
     nerror = utils.run_pipeline(pipeline, article)
@@ -91,7 +93,7 @@ def elmo_embedding(article):
     sents = article["article_sent"].split(" <splt> ")
 
     elmo = line2elmo2.create_elmo("original", False)
-    vectors = line2elmo2.elmo_one_article(elmo, sents, 200, 200, batchsize=50,)
+    vectors = line2elmo2.elmo_one_article(elmo, sents, 200, 200, batchsize=50)
     return vectors
 
 
@@ -102,10 +104,12 @@ def apply_ensemble_model(vectors):
     """
 
     model = ensemble_pred.create_ensemble_from_files(
-      sorted(glob.glob("prediction_models/*.hdf5")))
+        sorted(glob.glob("prediction_models/*.hdf5"))
+    )
 
     padded_vectors = keras.preprocessing.sequence.pad_sequences(
-      [vectors], maxlen=200, dtype='float32')[0]
+        [vectors], maxlen=200, dtype="float32"
+    )[0]
 
     data = numpy.array([padded_vectors])
 
