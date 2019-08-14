@@ -48,7 +48,7 @@ def load_data(data_path, max_len=200):
     return np.array(data), np.array(label), np.array(ids)
 
 
-def ensemble(models,model_input):
+def ensemble_model(models, model_input):
     outputs = [model(model_input) for model in models]
     y = Average()(outputs)
 
@@ -56,7 +56,8 @@ def ensemble(models,model_input):
 
     return model
 
-def load_models(*paths):
+
+def load_models(paths):
     """
     Load keras models from the paths, returning a list of
     models.
@@ -70,6 +71,18 @@ def load_models(*paths):
         models.append(model)
 
     return models
+
+
+def create_ensemble_from_files(paths):
+    """
+    Create an ensemble model from the keras models located at
+    `paths`, which is a sequence of pathnames.
+    """
+
+    models = load_models(paths)
+    model_input = Input(shape=models[0].input_shape[1:], dtype='float32')
+    return ensemble_model(models, model_input)
+
 
 
 def main():
@@ -88,16 +101,12 @@ def main():
 
     x_data, y_data, doc_id = load_data(options.inputTSV,max_len=max_len)
 
-    models = load_models(options.saved_model1,
+    ensemble = create_ensemble_from_files(
+        [options.saved_model1,
         options.saved_model2,
-        options.saved_model3)
+        options.saved_model3])
 
-    print(models[0].input_shape[1:])
-    model_input = Input(shape=models[0].input_shape[1:], dtype='float32')
-
-    ensemble_models = ensemble(models,model_input)
-
-    pred = ensemble_models.predict(x_data)
+    pred = ensemble.predict(x_data)
 
     all_pred = toEvaluationFormat(doc_id, pred)
     with open(options.output, 'w') as fo:
