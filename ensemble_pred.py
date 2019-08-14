@@ -1,11 +1,12 @@
 import ast
+import optparse
+
+import keras.models
+import numpy as np
+
 from sklearn.preprocessing import LabelEncoder
 from keras.preprocessing import sequence
-import numpy as np
-from keras.models import load_model
-from optparse import OptionParser
 from keras.layers import Average, Input
-from keras.models import Model
 
 
 def toEvaluationFormat(all_doc_ids, all_prediction):
@@ -51,7 +52,7 @@ def ensemble(models,model_input):
     outputs = [model(model_input) for model in models]
     y = Average()(outputs)
 
-    model = Model(model_input, y, name='ensemble')
+    model = keras.models.Model(model_input, y, name='ensemble')
 
     return model
 
@@ -64,7 +65,7 @@ def load_models(*paths):
     models = []
 
     for i, path in enumerate(paths, start=1):
-        model = load_model(path)
+        model = keras.models.load_model(path)
         model.name = "model{}".format(i)
         models.append(model)
 
@@ -72,7 +73,7 @@ def load_models(*paths):
 
 
 def main():
-    parser = OptionParser()
+    parser = optparse.OptionParser()
     parser.add_option("--inputTSV", help="load saved cache", type=str)
     parser.add_option("--output", help="load saved cache", type=str)
     parser.add_option("--saved_model1", help="load saved cache", type=str)
