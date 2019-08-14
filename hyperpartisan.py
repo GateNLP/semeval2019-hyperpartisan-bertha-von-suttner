@@ -8,15 +8,29 @@ model that is trained to estimate the "hyperpartisan" category
 of a news document.
 """
 
+
+
+# https://docs.python.org/3.5/library/glob.html
+import glob
+# https://docs.python.org/3.5/library/json.html
 import json
 # https://docs.python.org/3.5/library/sys.html
 import sys
 # https://docs.python.org/3.5/library/xml.etree.elementtree.html
 import xml.etree.ElementTree
 
+import os
+os.environ["KERAS_BACKEND"] = "tensorflow"
+
+import keras.preprocessing
+import numpy
+import sklearn.preprocessing
+
 from Preprocessing import utils
 from Preprocessing import xml2line
 from Preprocessing import line2elmo2
+
+import ensemble_pred
 
 
 def hyperpartisan(text):
@@ -32,8 +46,13 @@ def hyperpartisan(text):
 
     vectors = elmo_embedding(article)
 
+    score = apply_ensemble_model(vectors)
+
     json.dump([v.tolist() for v in vectors], sys.stdout, indent=2)
     print()
+
+    prediction = apply_ensemble_model(vectors)
+    print(prediction)
 
 
 def add_article_sent(article):
@@ -70,6 +89,24 @@ def elmo_embedding(article):
     elmo = line2elmo2.create_elmo("original", False)
     vectors = line2elmo2.elmo_one_article(elmo, sents, 200, 200, batchsize=50,)
     return vectors
+
+
+def apply_ensemble_model(vectors):
+    """
+    Given a list of vectors representing an article,
+    apply the ensemble model and return a score.
+    """
+
+    model = ensemble_pred.create_ensemble_from_files(
+      sorted(glob.glob("prediction_models/*.hdf5")))
+
+    padded_vectors = keras.preprocessing.sequence.pad_sequences(
+      [vectors], maxlen=200, dtype='float32')[0]
+
+    data = numpy.array([padded_vectors])
+
+    prediction = model.predict(data)
+    return prediction
 
 
 def main(argv=None):
