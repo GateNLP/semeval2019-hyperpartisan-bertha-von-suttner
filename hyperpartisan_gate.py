@@ -5,27 +5,9 @@
 import os
 import sys
 
-import hyperpartisan
-
-noisy = False
-if os.environ.get("USER") == "ac1xdrj":
-    noisy = True
-
-if noisy: print("hyper starting", file=sys.stderr, flush=True)
-
-if noisy:
-    with open(__file__) as me:
-        sys.stderr.write(me.read())
-
 from gate import executable
 
-if noisy: print("imported gate", file=sys.stderr)
-
-print("Python version", sys.version, file=sys.stderr, flush=True)
-
-# This version adds a dummy annotation,
-# it doesn't do any useful work yet.
-# But does demonstrate the interoperation.
+import hyperpartisan
 
 @executable
 def hyper(document, outputAS):
