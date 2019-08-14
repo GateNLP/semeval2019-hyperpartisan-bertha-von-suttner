@@ -34,6 +34,11 @@ import ensemble_pred
 
 
 def hyperpartisan(text):
+    """
+    Given the text of an article, as a Python string,
+    return a probability that the article is hyperpartisan.
+    As estimated by the models in the directory "prediction_models".
+    """
 
     article = {
         "id": "command line text",
@@ -42,17 +47,11 @@ def hyperpartisan(text):
 
     add_article_sent(article)
 
-    json.dump(article, sys.stdout, indent=2)
-
     vectors = elmo_embedding(article)
 
-    score = apply_ensemble_model(vectors)
-
-    json.dump([v.tolist() for v in vectors], sys.stdout, indent=2)
-    print()
-
     prediction = apply_ensemble_model(vectors)
-    print(prediction)
+
+    return prediction
 
 
 def add_article_sent(article):
@@ -105,8 +104,8 @@ def apply_ensemble_model(vectors):
 
     data = numpy.array([padded_vectors])
 
-    prediction = model.predict(data)
-    return prediction
+    predicts = model.predict(data)
+    return predicts[0].tolist()[0]
 
 
 def main(argv=None):
@@ -116,7 +115,8 @@ def main(argv=None):
     arg = argv[1:]
 
     text = " ".join(arg)
-    result = hyperpartisan(text)
+    score = hyperpartisan(text)
+    print(json.dumps({"hyperpartisan_probability": score}))
 
 
 if __name__ == "__main__":
