@@ -11,6 +11,10 @@ All are members of the [GATE](https://gate.ac.uk) team of the [University of She
 The model created with this was the winning entry, see the public leaderboard (sort by accuracy column, descending):
 https://www.tira.io/task/hyperpartisan-news-detection/dataset/pan19-hyperpartisan-news-detection-by-article-test-dataset-2018-12-07/
 
+[A blog article on the GATE blog](https://gate4ugc.blogspot.com/2019/02/gate-team-wins-first-prize-in.html) briefly describes the approach taken.
+
+If you wish to see the code as it was prepared for the SemEval 2019 task, then refer to the `semval-2019` tag in the git repo.
+
 ## Preparation / Requirements
 
 * Python 3.6 (Anaconda will work best)
